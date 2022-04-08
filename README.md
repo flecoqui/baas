@@ -62,13 +62,13 @@ For you local machine running Windows or MacOS or Linux, open a Terminal and run
 
 2. Clone the repository
 
-      git clone <https://CSECodeHub@dev.azure.com/CSECodeHub/499949%20-%20HO%20%20MC%205G%20initiative/_git/499949%20-%20HO%20%20MC%205G%20initiative>
+      git clone https://github.com/flecoqui/baas.git
 
 ### Launch Visual Studio Code with the dev container
 
 1. In the same terminal, navigate to the project folder
 
-      cd sharing-data-rest-api
+      cd baas
 
 2. Launch Visual Studio Code from your terminal with the following command:
 
@@ -334,28 +334,28 @@ For this scenario, the devcontainer has been updated to support:
 - Azure CLI
 - .Net Core SDK v6.X
 
-The file [tools.sh](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/.devcontainer/tools.sh)  for the installation of those components.
+The file [tools.sh](https://github.com/flecoqui/baas/blob/main/.devcontainer/tools.sh)  for the installation of those components.
 
-The file [devcontainer.json](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/.devcontainer/devcontainer.json)  for the VSCode extensions installation.
+The file [devcontainer.json](https://github.com/flecoqui/baas/blob/main/.devcontainer/devcontainer.json)  for the VSCode extensions installation.
 
 ### RTMP/RTSP adaptor container
 
 For this scenario, you need a RTMP/RTSP adaptor container ubuntu flavor.
 
-The [Dockerfile](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/docker/av-rtmp-rtsp-sink/ubuntu/Dockerfile) for the ubuntu flavor.  
+The [Dockerfile](https://github.com/flecoqui/baas/blob/main/envs/container/docker/av-rtmp-rtsp-sink/ubuntu/Dockerfile) for the ubuntu flavor.  
 
-The [docker-entrypoint.sh](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/docker/av-rtmp-rtsp-sink/ubuntu/docker-entrypoint.sh) for the ubuntu flavor.
+The [docker-entrypoint.sh](https://github.com/flecoqui/baas/blob/main/envs/container/docker/av-rtmp-rtsp-sink/ubuntu/docker-entrypoint.sh) for the ubuntu flavor.
 
 ### Deployment and test Azure Video Analyzer and Azure IoT Edge
 
 For the deployment of the infrastructure we use the following files:
-1. [avtool.sh](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/avtool.sh): a linux bash file used to deploy the infrastructure
-2. [azuredeploy.iothub.json](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/azuredeploy.iothub.json): an Azure ARM Template to deploy the IOT Hub and Azure Video Analyzer
-3. [azuredeploy.vm.json](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/azuredeploy.vm.json): an Azure ARM Template to deploy the Virtual Machine running IoT Edge
-4. [avatool](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/src/avatool/avatool.csproj): a .Net Core application used to deploy Azure Video Analyzer pipeline and read the IoT Hub events. This application is called from the avtool.sh script.
-5. [deployment.motion.json](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/deployment.motion.json): a json file which defines the list of containers to deploy for this recognition detecting motion pipeline.
-6. [deployment.tracking.json](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/deployment.tracking.json): a json file which defines the list of containers to deploy for this recognition object tracking pipeline .
-7. [operations.tracking.template.json](.https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/operations.tracking.template.hybrid.json): a json file which defines the pipeline and the operations to run the test of this recognition object tracking pipeline.
-8. [operations.motion.template.json](https://dev.azure.com/CSECodeHub/_git/499949%20-%20HO%20%20MC%205G%20initiative?path=/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/operations.motion.template.json): a json file which defines the pipeline and the operations to run the test of this recognition motion detection pipeline.
+1. [avtool.sh](https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/avtool.sh): a linux bash file used to deploy the infrastructure
+2. [azuredeploy.iothub.json](https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/azuredeploy.iothub.json): an Azure ARM Template to deploy the IOT Hub and Azure Video Analyzer
+3. [azuredeploy.vm.json](https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/azuredeploy.vm.json): an Azure ARM Template to deploy the Virtual Machine running IoT Edge
+4. [avatool](https://github.com/flecoqui/baas/blob/main/src/avatool/avatool.csproj): a .Net Core application used to deploy Azure Video Analyzer pipeline and read the IoT Hub events. This application is called from the avtool.sh script.
+5. [deployment.motion.json](https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/deployment.motion.json): a json file which defines the list of containers to deploy for this recognition detecting motion pipeline.
+6. [deployment.tracking.json](https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/deployment.tracking.json): a json file which defines the list of containers to deploy for this recognition object tracking pipeline .
+7. [operations.tracking.template.json](.https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/operations.tracking.template.hybrid.json): a json file which defines the pipeline and the operations to run the test of this recognition object tracking pipeline.
+8. [operations.motion.template.json](https://github.com/flecoqui/baas/blob/main/envs/container/azure-iot-edge/ava-rtmp-rtsp-sink/operations.motion.template.json): a json file which defines the pipeline and the operations to run the test of this recognition motion detection pipeline.
 
 At least some video files (mkv files) are available under the folder ./content.
