@@ -1,0 +1,9 @@
+
+# Add autocompletion to git commands
+source /usr/share/bash-completion/completions/git
+
+# Add aliases
+alias ll='ls -halp'
+
+# Custom extensions
+[ -f /workspace/me/bashrc_extension ] && . /workspace/me/bashrc_extension

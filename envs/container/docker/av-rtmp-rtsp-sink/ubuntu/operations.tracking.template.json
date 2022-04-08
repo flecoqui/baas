@@ -1,0 +1,271 @@
+{
+    "apiVersion": "2.0",
+    "operations": [
+        {
+            "opName": "pipelineTopologyList",
+            "opParams": {
+                "@apiVersion": "1.1"
+              }
+        },
+        {
+            "opName": "pipelineTopologySet",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "EVRtoVideoSinkOnMotionDetection",
+                "properties": {
+                  "description": "Analyzing live video to detect motion and emit events",
+                  "parameters": [
+                    {
+                      "name": "rtspUserName",
+                      "type": "String",
+                      "description": "rtsp source user name.",
+                      "default": "dummyUserName"
+                    },
+                    {
+                      "name": "rtspPassword",
+                      "type": "String",
+                      "description": "rtsp source password.",
+                      "default": "dummyPassword"
+                    },
+                    {
+                      "name": "rtspUrl",
+                      "type": "String",
+                      "description": "rtsp Url"
+                    },
+                    {
+                      "name":"inferenceUrl",
+                      "type":"string",
+                      "description":"inferenceUrl",
+                      "default": "http://yolov3/score"
+                  },
+                  {
+                      "name":"inferenceUrlPassword",
+                      "type":"string",
+                      "description":"inferenceUrlPassword",
+                      "default": "dummyPassword"
+                  },
+                  {
+                      "name":"inferenceUrlUsername",
+                      "type":"string",
+                      "description":"inferenceUrlUsername",
+                      "default": "dummyUserName"
+                  },                    
+                    {
+                      "name": "hubSinkOutputName",
+                      "type": "String",
+                      "description": "hub sink output name",
+                      "default": "inferenceOutput"
+                    },
+                    {
+                      "name": "videoName",
+                      "type": "String",
+                      "description": "video name used for the recording",
+                      "default": "sample camera 001"
+                    }
+                  ],
+                  "sources": [
+                    {
+                      "@type": "#Microsoft.VideoAnalyzer.RtspSource",
+                      "name": "rtspSource",
+                      "transport": "tcp",
+                      "endpoint": {
+                        "@type": "#Microsoft.VideoAnalyzer.UnsecuredEndpoint",
+                        "credentials": {
+                          "@type": "#Microsoft.VideoAnalyzer.UsernamePasswordCredentials",
+                          "username": "${rtspUserName}",
+                          "password": "${rtspPassword}"
+                        },
+                        "url": "${rtspUrl}"
+                      }
+                    }
+                  ],
+                  "processors": [
+                    {
+                      "@type":"#Microsoft.VideoAnalyzer.HttpExtension",
+                      "name":"httpExtension",
+                      "inputs":[
+                          {
+                              "nodeName":"rtspSource"
+                          }
+                      ],
+                      "endpoint":{
+                          "@type":"#Microsoft.VideoAnalyzer.UnsecuredEndpoint",
+                          "credentials":{
+                              "@type":"#Microsoft.VideoAnalyzer.UsernamePasswordCredentials",
+                              "username":"${inferenceUrlUsername}",
+                              "password":"${inferenceUrlPassword}"
+                          },
+                          "url":"${inferenceUrl}"
+                      },
+                      "image":{
+                          "scale":{
+                              "width":"416",
+                              "height":"416"
+                          },
+                          "format": {
+                              "@type": "#Microsoft.VideoAnalyzer.ImageFormatBmp"
+                          }
+                      },
+                      "samplingOptions":{
+                          "skipSamplesWithoutAnnotation":"False",
+                          "maximumSamplesPerSecond":"2.0"
+                      }
+                  },
+                  {
+                      "@type":"#Microsoft.VideoAnalyzer.ObjectTrackingProcessor",
+                      "name":"objectTracker",
+                      "inputs":[
+                          {
+                              "nodeName":"httpExtension"
+                          }
+                      ]
+                  },                    
+                    {
+                      "@type": "#Microsoft.VideoAnalyzer.SignalGateProcessor",
+                      "name": "signalGateProcessor",
+                      "inputs": [
+                        {
+                          "nodeName": "objectTracker"
+                        },
+                        {
+                          "nodeName": "rtspSource",
+                          "outputSelectors": [
+                            {
+                              "property": "mediaType",
+                              "operator": "is",
+                              "value": "video"
+                            }
+                          ]
+                        }
+                      ],
+                      "activationEvaluationWindow": "PT1S",
+                      "activationSignalOffset": "PT0S",
+                      "minimumActivationTime": "PT30S",
+                      "maximumActivationTime": "PT30S"
+                    }
+                  ],
+                  "sinks": [
+                    {
+                      "@type": "#Microsoft.VideoAnalyzer.VideoSink",
+                      "name": "videoSink",
+                      "videoName": "${videoName}",
+                      "inputs": [
+                        {
+                          "nodeName": "signalGateProcessor",
+                          "outputSelectors": [
+                            {
+                              "property": "mediaType",
+                              "operator": "is",
+                              "value": "video"
+                            }
+                          ]
+                        }
+                      ],
+                      "videoCreationProperties": {
+                        "title": "${videoName}",
+                        "description": "Motion-detection based recording of clips to a video resource",
+                        "segmentLength": "PT30S"
+                      },
+                      "localMediaCachePath": "/var/lib/videoanalyzer/tmp/",
+                      "localMediaCacheMaximumSizeMiB": "2048"
+                    },
+                    {
+                      "@type": "#Microsoft.VideoAnalyzer.IoTHubMessageSink",
+                      "name": "hubSink",
+                      "hubOutputName": "${hubSinkOutputName}",
+                      "inputs": [
+                        {
+                          "nodeName": "objectTracker"
+                        }                        
+                      ]
+                    }
+                  ]
+                }
+              }
+        },
+        {
+            "opName": "pipelineTopologyList",
+            "opParams": {
+                "@apiVersion": "1.1"
+              }
+        },
+        {
+            "opName": "pipelineTopologyGet",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "EVRtoVideoSinkOnMotionDetection"
+              }
+        },
+        {
+            "opName": "livePipelineSet",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "mdpipeline1",
+                "properties": {
+                  "topologyName": "EVRtoVideoSinkOnMotionDetection",
+                  "description": "Sample pipeline description",
+                  "parameters": [
+                    {
+                      "name": "rtspUrl",
+                      "value": "rtsp://{AV_HOSTNAME}:{AV_PORT_RTSP}/rtsp/stream"
+                    },
+                    {
+                      "name": "rtspUserName",
+                      "value": "testuser"
+                    },
+                    {
+                      "name": "rtspPassword",
+                      "value": "testpassword"
+                    },
+                    {
+                      "name": "videoName",
+                      "value": "{AV_TEST_VIDEO_NAME}"
+                    }
+                  ]
+                }
+              }
+        },
+        {
+            "opName": "livePipelineActivate",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "mdpipeline1"
+              }
+        },
+        {
+            "opName": "livePipelineGet",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "mdpipeline1"
+              }
+        },
+        {
+            "opName": "livePipelineDeactivate",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "mdpipeline1"
+              }
+        },
+        {
+            "opName": "livePipelineDelete",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "mdpipeline1"
+              }
+        },
+        {
+            "opName": "pipelineTopologyDelete",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "EVRtoVideoSinkOnMotionDetection"
+              }
+        },
+        {
+            "opName": "pipelineTopologyList",
+            "opParams": {
+                "@apiVersion": "1.1",
+                "name": "EVRtoVideoSinkOnMotionDetection"
+              }
+        }
+    ]
+}

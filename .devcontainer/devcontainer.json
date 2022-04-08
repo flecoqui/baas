@@ -1,0 +1,28 @@
+{
+	"name": "BaaS",
+
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash"
+	},
+
+	"extensions": [
+        	"vsciot-vscode.azure-iot-toolkit",
+		"vsciot-vscode.azure-iot-edge",
+		"yzhang.markdown-all-in-one"
+	],
+	
+	"forwardPorts": [],
+	
+	"remoteUser": "vscode",
+
+	// As git lfs is used, no need to mount .ssh folder from host.
+	// "mounts": ["source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind"],
+	"mounts": ["source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind","source=tempvol,target=/tempvol,type=volume"],
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+	"workspaceFolder": "/workspace",
+	"postAttachCommand": "sudo chown -R vscode:vscode /var/run/docker.sock"
+}
